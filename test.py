@@ -6,7 +6,7 @@ with open('aman', 'r') as f:
     for i in f:
     #    x,y,z=i.split('/')
        if '.txt' in i:
-           print(i)
+        #    print(i)
         # soc.append(i[:-1])
     #     partation.append(y)
     #     swc.append(z)
