@@ -1,0 +1,55 @@
+name: test
+on: 
+    push:
+    pull_request:
+      
+jobs:
+   first-job:
+      runs-on: ubuntu-latest
+      outputs:
+        output1: ${{ steps.abc.outputs.data}}
+      steps:
+        - name: checkout
+          uses: actions/checkout@v3
+          with:
+             fetch-depth: 2
+
+        - name: last modified file
+          id: new
+          run: |
+               git diff --name-only --no-commit-id ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+              #  git diff --name-only --no-commit-id ${{ github.event.before }} ${{ github.sha }} >> aman
+        #       #  git diff --name-only --diff-filter=AM ${{ github.event.before }} ${{ github.sha }} 
+              #  echo "data=$test" >> "$GITHUB_OUTPUT" 
+        
+        - name: run python script
+          id: bus
+          run: |
+            abc=$(python test.py)
+            echo "data=$abc" >> "$GITHUB_OUTPUT" 
+
+        - name: output result
+          run: |
+              cat "${{ steps.bus.outputs.data}}"
+
+  #  second-job:
+  #     needs: first-job
+  #     strategy:
+  #       matrix: 
+  #          version: ${{ needs.first-job.outputs.output1}}
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - name: checkout again for job2
+  #         uses: actions/checkout@v3
+
+  #       - name: run command
+  #         run : |
+  #            echo ${{ matrix.version }}
+
+
+
+
+
+        # - name: run command
+        #   run: python ${{  steps.new.outputs.data }}
+              
